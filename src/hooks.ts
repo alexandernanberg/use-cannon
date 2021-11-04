@@ -17,7 +17,7 @@ import type {
   VectorName,
 } from './setup'
 import { DynamicDrawUsage, Euler, InstancedMesh, MathUtils, Object3D, Quaternion, Vector3 } from 'three'
-import { useLayoutEffect, useContext, useRef, useMemo, useEffect, useState } from 'react'
+import { useLayoutEffect, useContext, useRef, useMemo, useState } from 'react'
 import { context, debugContext } from './setup'
 
 export type AtomicProps = {
@@ -578,7 +578,7 @@ function useConstraint<T extends 'Hinge' | ConstraintTypes>(
   const refA = useForwardedRef(bodyA)
   const refB = useForwardedRef(bodyB)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (refA.current && refB.current) {
       worker.postMessage({
         op: 'addConstraint',
@@ -667,7 +667,7 @@ export function useSpring(
   const refA = useForwardedRef(bodyA)
   const refB = useForwardedRef(bodyB)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (refA.current && refB.current) {
       worker.postMessage({
         op: 'addSpring',
@@ -702,7 +702,7 @@ function useRay(
 ) {
   const { worker, events } = useContext(context)
   const [uuid] = useState(() => MathUtils.generateUUID())
-  useEffect(() => {
+  useLayoutEffect(() => {
     events[uuid] = { rayhit: callback }
     worker.postMessage({ op: 'addRay', uuid, props: { mode, ...options } })
     return () => {
